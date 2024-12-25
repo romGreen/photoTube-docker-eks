@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpp-tcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpp-tcp-server
+  template:
+    metadata:
+      labels:
+        app: cpp-tcp-server
+    spec:
+      containers:
+        - name: cpp-tcp-server
+          image: 116981767633.dkr.ecr.eu-north-1.amazonaws.com/cpp-tcp-server:latest
+          ports:
+            - containerPort: 2347
+      imagePullSecrets:
+        - name: regcred # Added the imagePullSecrets field
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpp-tcp-server
+spec:
+  selector:
+    app: cpp-tcp-server
+  ports:
+    - protocol: TCP
+      port: 2347
+      targetPort: 2347

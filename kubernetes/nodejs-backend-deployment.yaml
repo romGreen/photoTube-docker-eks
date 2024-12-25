@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-backend
+  template:
+    metadata:
+      labels:
+        app: nodejs-backend
+    spec:
+      containers:
+        - name: nodejs-backend
+          image: 116981767633.dkr.ecr.eu-north-1.amazonaws.com/nodejs-backend:v2
+          ports:
+            - containerPort: 1324
+          env:
+            - name: TCP_SERVER_HOST
+              value: "cpp-tcp-server"
+            - name: TCP_SERVER_PORT
+              value: "2347"
+      imagePullSecrets:
+        - name: regcred # Added the imagePullSecrets field
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-backend
+spec:
+  selector:
+    app: nodejs-backend
+  ports:
+    - protocol: TCP
+      port: 1324
+      targetPort: 1324
+  type: LoadBalancer # Expose it as a LoadBalancer service for external access
