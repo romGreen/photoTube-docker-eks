@@ -1,0 +1,3 @@
+[submodule "PhotoTube-Server"]
+	path = PhotoTube-Server
+	url = https://github.com/romGreen/PhotoTube-Server.git
